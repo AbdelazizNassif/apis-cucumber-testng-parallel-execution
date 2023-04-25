@@ -1,7 +1,5 @@
 # Api Automation
 
-Automating foodics whoAmI API using login API as precondition
-
 # Used tools
 - Java, rest assured
 
