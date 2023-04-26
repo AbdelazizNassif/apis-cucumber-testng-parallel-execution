@@ -6,11 +6,7 @@ import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.hamcrest.Matchers;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
-import java.util.Date;
-
 import static filesReaders.ReadFromFiles.getJsonStringValueByKey;
 import static filesReaders.ReadFromFiles.getPropertyByKey;
 
