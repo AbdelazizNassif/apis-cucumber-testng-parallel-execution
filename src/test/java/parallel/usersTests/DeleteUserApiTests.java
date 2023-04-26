@@ -18,7 +18,7 @@ import static filesReaders.ReadFromFiles.getPropertyByKey;
 
 public class DeleteUserApiTests {
 
-    ThreadLocal<String> userId = new ThreadLocal<>();
+    volatile  ThreadLocal<String> userId = new ThreadLocal<>();
     volatile String userDataJsonFile = "userTestData.json" ;
 
     @BeforeMethod

@@ -20,11 +20,11 @@ import static filesReaders.ReadFromFiles.getPropertyByKey;
 public class EditUserApiTests {
 
     ThreadLocal<String> userId = new ThreadLocal<>();
-    volatile String userDataJsonFile = "userTestData.json" ;
+    static volatile String userDataJsonFile = "userTestData.json" ;
 
 
     @BeforeMethod
-    public synchronized  void setUpPreconditions_createNewUser ()
+    public  synchronized  void setUpPreconditions_createNewUser ()
     {
         RequestSpecification request = RestAssured.given()
                 .baseUri(getPropertyByKey("environment.properties", "APP_URL"));
