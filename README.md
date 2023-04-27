@@ -17,9 +17,11 @@
 
 # done:
 - parallel execution of api tests on method level
+- Github actions
+- cucumber-testng parallel execution on scenarios level
+- cucumber-testng runner class
 
 # In progress:
 - cucumber tags
-- cucumber runner class
-- cucumber parallel execution
-- Github actions
+
+
