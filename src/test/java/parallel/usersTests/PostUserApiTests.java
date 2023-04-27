@@ -7,6 +7,8 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.hamcrest.Matchers;
 import org.testng.annotations.Test;
+import utils.Utils;
+
 import static filesReaders.ReadFromFiles.getJsonStringValueByKey;
 import static filesReaders.ReadFromFiles.getPropertyByKey;
 
@@ -21,7 +23,7 @@ public class PostUserApiTests {
 
         PostUserApi postUserApiTests = new PostUserApi(request);
         Response response = postUserApiTests.createNewUser_validTokenAndValidEmail(
-                String.format(getJsonStringValueByKey(userDataJsonFile, "email"), System.currentTimeMillis())
+                String.format(getJsonStringValueByKey(userDataJsonFile, "email"), Utils.generateRandomString(7))
         );
         response.then().log().all()
                 .statusCode(201)
@@ -41,7 +43,7 @@ public class PostUserApiTests {
         PostUserApi postUserApiTests = new PostUserApi(request);
         System.out.println("Before");
         Response creationResponse = postUserApiTests.createNewUser_validTokenAndValidEmail(
-                String.format(getJsonStringValueByKey(userDataJsonFile, "email"), System.currentTimeMillis())
+                String.format(getJsonStringValueByKey(userDataJsonFile, "email"), Utils.generateRandomString(7))
         );
         System.out.println("Before after");
 

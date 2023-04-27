@@ -7,6 +7,7 @@ import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.hamcrest.Matchers;
+import utils.Utils;
 
 import static filesReaders.ReadFromFiles.getJsonStringValueByKey;
 import static filesReaders.ReadFromFiles.getPropertyByKey;
@@ -47,7 +48,7 @@ public class AddUserStepDefs {
         // Write code here that turns the phrase above into concrete actions
         System.out.println("i_add_new_user_with_unique_email");
         response = postUserApiTests.createNewUser_validTokenAndValidEmail(
-                String.format(getJsonStringValueByKey(userDataJsonFile, "email"), System.currentTimeMillis())
+                String.format(getJsonStringValueByKey(userDataJsonFile, "email"), Utils.generateRandomString(7))
         );
     }
     @Then("A new user is added to the system")
@@ -70,7 +71,7 @@ public class AddUserStepDefs {
     public void there_is_a_user_in_the_system_with_certain_email() {
         // Write code here that turns the phrase above into concrete actions
         System.out.println("there_is_a_user_in_the_system_with_certain_email");
-        redundantEmail = String.format("dummy.%s@example.com", System.currentTimeMillis());
+        redundantEmail = String.format("dummy.%s@example.com", Utils.generateRandomString(7));
         postUserApiTests.createNewUser_validTokenAndValidEmail(redundantEmail);
     }
     @When("I add new user with redundant email")

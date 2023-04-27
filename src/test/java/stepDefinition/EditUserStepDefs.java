@@ -14,6 +14,7 @@ import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.hamcrest.Matchers;
+import utils.Utils;
 
 import java.util.Date;
 
@@ -55,7 +56,7 @@ public class EditUserStepDefs {
 
         PostUserApi postUserApiTests = new PostUserApi(request);
         Response response = postUserApiTests.createNewUser_validTokenAndValidEmail(
-                String.format(getJsonStringValueByKey(userDataJsonFile, "email"), System.currentTimeMillis())
+                String.format(getJsonStringValueByKey(userDataJsonFile, "email"), Utils.generateRandomString(7))
         );
         JsonPath jp = response.jsonPath();
         userId = jp.getString("id") ;

@@ -10,6 +10,7 @@ import org.hamcrest.Matchers;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import utils.Utils;
 
 import java.util.Date;
 
@@ -29,7 +30,7 @@ public class GetUserApiTests {
 
         PostUserApi postUserApiTests = new PostUserApi(request);
         Response response = postUserApiTests.createNewUser_validTokenAndValidEmail(
-                String.format(getJsonStringValueByKey(userDataJsonFile, "email"), System.currentTimeMillis())
+                String.format(getJsonStringValueByKey(userDataJsonFile, "email"), Utils.generateRandomString(7))
         );
         JsonPath jp = response.jsonPath();
         userId.set(  jp.getString("id") ) ;

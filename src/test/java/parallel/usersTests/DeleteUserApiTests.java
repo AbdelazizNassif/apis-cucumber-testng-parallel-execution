@@ -12,6 +12,7 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import utils.Utils;
 
 import static filesReaders.ReadFromFiles.getJsonStringValueByKey;
 import static filesReaders.ReadFromFiles.getPropertyByKey;
@@ -28,7 +29,7 @@ public class DeleteUserApiTests {
                 .baseUri(getPropertyByKey("environment.properties", "APP_URL"));
         PostUserApi postUserApiTests = new PostUserApi(request);
         Response response = postUserApiTests.createNewUser_validTokenAndValidEmail(
-                String.format(getJsonStringValueByKey(userDataJsonFile, "email"), System.currentTimeMillis())
+                String.format(getJsonStringValueByKey(userDataJsonFile, "email"), Utils.generateRandomString(7))
         );
         response.then().log().all();
         JsonPath jp = response.jsonPath();
@@ -42,7 +43,7 @@ public class DeleteUserApiTests {
                 .baseUri(getPropertyByKey("environment.properties", "APP_URL"));
         PostUserApi postUserApiTests = new PostUserApi(request);
         Response response = postUserApiTests.createNewUser_validTokenAndValidEmail(
-                String.format(getJsonStringValueByKey(userDataJsonFile, "email"), System.currentTimeMillis())
+                String.format(getJsonStringValueByKey(userDataJsonFile, "email"), Utils.generateRandomString(7))
         );
         JsonPath jp = response.jsonPath();
         userId.set( jp.getString("id") ) ;
