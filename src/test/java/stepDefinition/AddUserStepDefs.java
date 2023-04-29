@@ -15,10 +15,10 @@ import static filesReaders.ReadFromFiles.getPropertyByKey;
 public class AddUserStepDefs {
 
     volatile String userDataJsonFile = "userTestData.json" ;
-    RequestSpecification request = null ;
-    RequestSpecification redundantEmailRequest = null ;
-    PostUserApi postUserApiTests = null ;
-    Response response = null ;
+    RequestSpecification request ;
+    RequestSpecification redundantEmailRequest ;
+    PostUserApi postUserApiTests ;
+    Response response ;
     String redundantEmail;
 
     @Before
@@ -35,26 +35,26 @@ public class AddUserStepDefs {
         response = null ;
     }
     // first scenario
-    @Given("I have valid authentication token for creating new user")
+    @Given("I am a logged in system user, who have permission to create new user")
     public void i_have_valid_authentication_token() {
         // Write code here that turns the phrase above into concrete actions
         System.out.println("i_have_valid_authentication_token");
-        request = RestAssured.given()
-                .baseUri(getPropertyByKey("environment.properties", "APP_URL"));
-        postUserApiTests = new PostUserApi(request);
+        request  =  RestAssured.given()
+                .baseUri(getPropertyByKey("environment.properties", "APP_URL"))  ;
+        postUserApiTests = (  new PostUserApi(request) ) ;
     }
     @When("I add new user with unique email")
     public void i_add_new_user_with_unique_email() {
         // Write code here that turns the phrase above into concrete actions
         System.out.println("i_add_new_user_with_unique_email");
-        response = postUserApiTests.createNewUser_validTokenAndValidEmail(
-                String.format(getJsonStringValueByKey(userDataJsonFile, "email"), Utils.generateRandomString(7))
-        );
+        response =  postUserApiTests.createNewUser_validTokenAndValidEmail(
+                String.format(getJsonStringValueByKey(userDataJsonFile, "email"), Utils.generateRandomString(7)) );
     }
     @Then("A new user is added to the system")
     public void a_new_user_is_added_to_the_system() {
         // Write code here that turns the phrase above into concrete actions
         System.out.println("a_new_user_is_added_to_the_system");
+
         response.then().log().all()
                 .statusCode(201)
                 .header("Content-Type", Matchers.containsStringIgnoringCase("application/json;"))
@@ -71,22 +71,22 @@ public class AddUserStepDefs {
     public void there_is_a_user_in_the_system_with_certain_email() {
         // Write code here that turns the phrase above into concrete actions
         System.out.println("there_is_a_user_in_the_system_with_certain_email");
-        redundantEmail = String.format("dummy.%s@example.com", Utils.generateRandomString(7));
+        redundantEmail = String.format("dummy.%s@example.com", Utils.generateRandomString(9));
         postUserApiTests.createNewUser_validTokenAndValidEmail(redundantEmail);
     }
     @When("I add new user with redundant email")
     public void i_add_new_user_with_redundant_email() {
         // Write code here that turns the phrase above into concrete actions
         System.out.println("i_add_new_user_with_redundant_email");
-        redundantEmailRequest = RestAssured.given()
-                .baseUri(getPropertyByKey("environment.properties", "APP_URL"));
-        postUserApiTests = new PostUserApi(redundantEmailRequest);
+        redundantEmailRequest =  RestAssured.given()
+                .baseUri(getPropertyByKey("environment.properties", "APP_URL")) ;
+        postUserApiTests =  new PostUserApi(redundantEmailRequest) ;
     }
     @Then("A new User is not added and I should receive response that email is taken")
     public void a_new_user_is_not_added_and_i_should_receive_response_that_email_is_taken() {
         // Write code here that turns the phrase above into concrete actions
         System.out.println("a_new_user_is_not_added_and_i_should_receive_response_that_email_is_taken");
-        response = postUserApiTests.createNewUser_validTokenAndValidEmail(redundantEmail);
+        response = postUserApiTests.createNewUser_validTokenAndValidEmail(redundantEmail)  ;
         System.out.println("RESPONSE IS *****************");
         response.then().log().all()
                 .statusCode(422)
@@ -95,54 +95,44 @@ public class AddUserStepDefs {
                 .body("message[0]", Matchers.equalTo("has already been taken"));
     }
     // third scenario
-    @Given("I did not add authentication token for creating new user")
+    @Given("I am not logged in system user, forgot to login")
     public void i_did_not_have_valid_authentication_token() {
         // Write code here that turns the phrase above into concrete actions
         System.out.println("i_did_not_have_valid_authentication_token");
-        request = RestAssured.given()
-                .baseUri(getPropertyByKey("environment.properties", "APP_URL"));
-        postUserApiTests = new PostUserApi(request);
+        request =  RestAssured.given()
+                .baseUri(getPropertyByKey("environment.properties", "APP_URL"))  ;
+        postUserApiTests = new PostUserApi(request ) ;
     }
     @When("I try to add new user with unique email")
     public void i_try_to_add_new_user_with_unique_email() {
         // Write code here that turns the phrase above into concrete actions
         System.out.println("i_try_to_add_new_user_with_unique_email");
-        response = postUserApiTests.createNewUser_missingAuthenticationAndValidEmail();
-    }
-
-    @Then("A new User is not added and I should receive response that authentication is required")
-    public void a_new_user_is_not_added_and_i_should_receive_response_that_authentication_is_required() {
-        // Write code here that turns the phrase above into concrete actions
-        System.out.println("a_new_user_is_not_added_and_i_should_receive_response_that_authentication_is_required");
-        response.then()
-                .statusCode(401)
-                .header("Content-Type", Matchers.containsStringIgnoringCase("application/json;"))
-                .body("message" , Matchers.equalTo("Authentication failed"));
+        response = postUserApiTests.createNewUser_missingAuthenticationAndValidEmail() ;
     }
 
 
     // fourth scenario
-    @Given("I have invalid authentication token for creating new user")
+    @Given("I am not logged in system user, having expired session")
     public void i_have_invalid_authentication_token() {
         // Write code here that turns the phrase above into concrete actions
         System.out.println("i_have_invalid_authentication_token");
         request = RestAssured.given()
-                .baseUri(getPropertyByKey("environment.properties", "APP_URL"));
-        postUserApiTests = new PostUserApi(request);
+                .baseUri(getPropertyByKey("environment.properties", "APP_URL"))  ;
+        postUserApiTests =  new PostUserApi(request ) ;
     }
-    @When("I try to add new user with unique email while having invalid token")
+    @When("I try to add new user with unique email while having expired session")
     public void i_try_to_add_new_user_with_unique_email_while_having_invalid_token() {
-        response = postUserApiTests.createNewUser_invalidTokenAndValidEmail();
+        response = postUserApiTests.createNewUser_invalidTokenAndValidEmail()  ;
     }
-    @Then("A new User is not added and I should receive response that token is invalid")
-    public void a_new_user_is_not_added_and_i_should_receive_response_that_token_is_invalid() {
+    @Then("User is not added to the system because {string} with {int} shown")
+    public void a_new_user_is_not_added_and_i_should_receive_response_that_token_is_invalid(String invalidTokenErr, int errCode) {
         // Write code here that turns the phrase above into concrete actions
         System.out.println("a_new_user_is_not_added_and_i_should_receive_response_that_token_is_invalid");
         response.then()
                 .statusLine(Matchers.equalTo("HTTP/1.1 401 Unauthorized"))
-                .statusCode(401)
+                .statusCode(errCode)
                 .header("Content-Type", Matchers.containsStringIgnoringCase("application/json;"))
-                .body("message" , Matchers.equalTo("Invalid token"));
+                .body("message" , Matchers.equalTo(invalidTokenErr));
     }
 
     // fifth scenario
@@ -151,10 +141,10 @@ public class AddUserStepDefs {
     public void i_try_to_add_new_user_with_invalid_email_format() {
         // Write code here that turns the phrase above into concrete actions
         System.out.println("i_try_to_add_new_user_with_invalid_email_format");
-        response = postUserApiTests.createNewUser_validTokenAndInvalidEmail();
+        response = postUserApiTests.createNewUser_validTokenAndInvalidEmail() ;
     }
-    @Then("A new User is not added and I should receive response that email format is not correct")
-    public void a_new_user_is_not_added_and_i_should_receive_response_that_email_format_is_not_correct() {
+    @Then("User is not added to the system because {string} {string}")
+    public void a_new_user_is_not_added_and_i_should_receive_response_that_email_format_is_not_correct(String emailField, String invalidEmailErr) {
         // Write code here that turns the phrase above into concrete actions
         System.out.println("a_new_user_is_not_added_and_i_should_receive_response_that_email_format_is_not_correct");
 
@@ -162,8 +152,9 @@ public class AddUserStepDefs {
                 .statusLine(Matchers.equalTo("HTTP/1.1 422 Unprocessable Entity"))
                 .statusCode(422)
                 .header("Content-Type", Matchers.containsStringIgnoringCase("application/json;"))
-                .body("field[0]" , Matchers.equalTo("email"))
-                .body("message[0]" , Matchers.equalTo("is invalid"));
+                .body("field[0]" , Matchers.equalTo(emailField))
+                .body("message[0]" , Matchers.equalTo(invalidEmailErr));
     }
+
 
 }
