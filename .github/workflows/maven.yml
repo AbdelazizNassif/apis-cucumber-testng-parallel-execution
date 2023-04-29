@@ -42,7 +42,7 @@ jobs:
       run: mvn clean
       
     - name: run tests
-      run: mvn test
+      run: mvn test -Dcucumber.filter.tags="@automated and @users"
       
     - name: check files
       run: ls -a

@@ -1,7 +1,7 @@
 # Api Automation
 
 # Used tools
-- Java, rest assured, cucumber
+- Java, rest assured, cucumber, testNG
 
 # Design patterns used:
 - Object model design pattern
@@ -15,13 +15,10 @@
 - Open terminal in the project folder
 - Run command mvn clean, mvn test
 
-# done:
-- parallel execution of api tests on method level
-- Github actions
+# The following features are implemented:
+- parallel execution of api tests on method level using testng
+- GitHub actions for running tests and artifact the test results
 - cucumber-testng parallel execution on scenarios level
 - cucumber-testng runner class
-
-# In progress:
-- cucumber tags
-
+- Running with the help of cucumber tags
 
